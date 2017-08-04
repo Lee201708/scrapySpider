@@ -925,14 +925,14 @@ class Media(RedisCrawlSpider):
         selector = Selector(response)
         referer = response.request.headers['Referer']
         fromWord = unquote(''.join(re.findall(".*\?word=(.*?)&.*?", str(referer))))
-        titles = selector.xpath('//body/div[@class="main"]/div[@class="left"]/div[@id="artical"]/h1[@id="artical_topic"]/text()|//body/div[@class="yc_main wrap"]/div[@class="yc_tit"]/h1/text()').extract()
-        pubtime = "".join(selector.xpath('//body/div[@class="main"]/div[@class="left"]/div[@id="artical"]/div[@id="artical_sth"]/p[@class="p_time"]/span[@class="ss01"]/text()|//body/div[@class="yc_main wrap"]/div[@class="yc_tit"]/p/span/text()').extract())[0:10]
+        titles = selector.xpath('//body/div[@class="main"]/div[@class="left"]/div[@id="artical"]/h1[@id="artical_topic"]/text()|//body/div[@class="yc_main wrap"]/div[@class="yc_tit"]/h1/text()|body/div[@class="hdpTit clearfix"]/div[@id="titL"]/h1/text()').extract()
+        pubtime = "".join(selector.xpath('//body/div[@class="main"]/div[@class="left"]/div[@id="artical"]/div[@id="artical_sth"]/p[@class="p_time"]/span[@class="ss01"]/text()|//body/div[@class="yc_main wrap"]/div[@class="yc_tit"]/p/span/text()|body/div[@class="hdpTit clearfix"]/div[@id="titL"]/p/span/text()').extract())
         if "年" in pubtime:
-            pubtime = "-".join(re.findall("(\d{4})年(\d{2})月(\d{2})",pubtime)[0])
+            pubtime = "-".join(re.findall("(\d{4})年(\d{2})月(\d{2})", pubtime)[0])
         contents = selector.xpath('//body/div[@class="main"]/div[@class="left"]/div[@id="artical"]/div[@id="artical_real"]/div[@id="main_content"]//p/text()[normalize-space()]|//body/div[@class="yc_main wrap"]/div[@class="yc_con clearfix"]/div[@class="yc_con_l"]/div[@id="yc_con_txt"]/p/text()[normalize-space()]').extract()
         articalAncestors = selector.xpath('//body/div[@class="main"]/div[@class="left"]/div[@id="artical"]/div[@id="artical_sth"]/p[@class="p_time"]//span[@class="ss03"]//text()|//body/div[@class="yc_main wrap"]/div[@class="yc_tit"]/p/a/text()').extract()
-        authors = selector.xpath('//body/div[@class="main"]/div[@class="left"]/div[@id="artical"]/div[@id="artical_sth"]/p[@class="p_time"]/span[@itemprop="author"]/span[@itemprop="name"]/text()').extract()
-        imgs = selector.xpath('//body/div[@class="main"]/div[@class="left"]/div[@id="artical"]/div[@id="artical_real"]/div[@id="main_content"]//p//img/@src|//body/div[@class="yc_main wrap"]/div[@class="yc_con clearfix"]/div[@class="yc_con_l"]/div[@id="yc_con_txt"]/p[@class="detailPic"]/img/@src').extract()
+        authors = selector.xpath( '//body/div[@class="main"]/div[@class="left"]/div[@id="artical"]/div[@id="artical_sth"]/p[@class="p_time"]/span[@itemprop="author"]/span[@itemprop="name"]/text()').extract()
+        imgs = selector.xpath('//body/div[@class="main"]/div[@class="left"]/div[@id="artical"]/div[@id="artical_real"]/div[@id="main_content"]//p//img/@src|//body/div[@class="yc_main wrap"]/div[@class="yc_con clearfix"]/div[@class="yc_con_l"]/div[@id="yc_con_txt"]/p[@class="detailPic"]/img/@src|body/div[@id="imgBox"]/div[@id="picDiv"]/div/img[@id="photoPrevLoading"]/@src').extract()
         # imgsIntros = selector.xpath('//body/div[@class="main"]/div[@class="left"]/div[@id="artical"]/div[@id="artical_real"]/div[@id="main_content"]/p[@class="picIntro"]/span/text()').extract()
         url = response.url
         title = ''.join(titles).strip()
