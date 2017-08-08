@@ -206,6 +206,10 @@ class NewsInsertMongoDBPipeline(object):
         self.post = tdb[MONGODB_DOCNAME2]
 
     def process_item(self,item,spider):
+        data = item['Pubtime']
+        dataarray = time.strptime(data,"%Y-%m-%d")
+        datastamp = int(time.mktime(dataarray))
+        item['Pubtime'] = datastamp
         NewsInfo = dict(item)
         if self.post.insert(NewsInfo):
             print('存储成功！')
